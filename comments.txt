@@ -1,9 +1,11 @@
-sudo sudo
+sudo su
 yum update
 
-yum install httpd
-
-yum install php70 php-devel php-mbstring php-pdo php-gd
+yum remove httpd httpd-tools
+yum install httpd24 
+yum install php70
+yum install php70-devel php70-mbstring php70-pdo php70-gd
+yum install mysql57 mysql57-server
 
 // PHP Version 確認
 php --version
@@ -15,16 +17,25 @@ vim /etc/php.ini
 mbstring.internal_encoding = UTF-8
 mbstring.http_input = UTF-8
 
-yum install mysql57 mysql57-server
 
 mkdir /要放/file/的地方/千萬不要是/自己的root
 
 groupadd -g 10000 edit
 usermod -a -G edit 戶名
 usermod -a -G edit apache
+usermod -a -G apache apache
+
+mkdir /home/戶名/資料夾
+e.g. /home/ec2-user/www/
+
+vim /home/ec2-user/資料夾/測試業.php
+e.g. /home/ec2-user/www/test.php
+
 sudo chown 戶名:edit “資料夾”
 sudo chmod 775 “資料夾”
+sudo chmod 751 /home/ec2-user/
 
+#修改Apache的root
 vim /etc/httpd/conf/httpd.conf
 
 Document Root "資料夾，最後面不要/"
@@ -39,9 +50,8 @@ service mysqld start
 service httpd start
 
 
-
 mysql -u root -p
 
-CREATE USER 'jgwcuk'@'localhost' IDENTIFIED BY 'YOURPASSWORD';
-GRANT ALL PRIVILEGES ON jgwc.* TO 'jgwc'@'localhost' WITH GRANT OPTION;
-
+create database "DB名字"
+CREATE USER '帳號名稱'@'localhost' IDENTIFIED BY 'YOURPASSWORD';
+GRANT ALL PRIVILEGES ON "DB名字".* TO '帳號名稱'@'localhost' WITH GRANT OPTION;
