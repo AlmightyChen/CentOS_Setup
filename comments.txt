@@ -40,11 +40,18 @@ vim /etc/httpd/conf/httpd.conf
 
 Document Root "資料夾，最後面不要/"
 
-<Directory "/var/www/html"> // 看哪個資料夾
-    AllowOverride All
+<Directory "/var/www/"> // 資料夾上層
+    AllowOverride None
+    Require all denied
 </Directory>
 
-yum reboot
+<Directory "/var/www/html"> // 看哪個資料夾
+    Options Indexes FollowSymLinks
+    AllowOverride All
+    Require all granted
+</Directory>
+
+reboot
 
 service mysqld start
 service httpd start
@@ -52,6 +59,7 @@ service httpd start
 
 mysql -u root -p
 
-create database "DB名字"
+create database "DB名字";
 CREATE USER '帳號名稱'@'localhost' IDENTIFIED BY 'YOURPASSWORD';
-GRANT ALL PRIVILEGES ON "DB名字".* TO '帳號名稱'@'localhost' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON DB名字.* TO '帳號名稱'@'localhost' WITH GRANT OPTION;
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('設一個password給root');
